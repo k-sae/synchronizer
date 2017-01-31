@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane id="main" alignment="center" hgap="10" prefWidth="303.0" vgap="10" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Synchronizer.Controller">
+   <children>
+      <Button mnemonicParsing="false" text="Button" GridPane.rowIndex="1" />
+   </children>
+</GridPane>
