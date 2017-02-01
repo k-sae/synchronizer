@@ -1,5 +1,7 @@
 package Connections.Client;
 
+import Connections.TransmissionFailureListener;
+
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;

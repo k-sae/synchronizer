@@ -1,4 +1,4 @@
-package Connections.Client;
+package Connections;
 
 /**
  * Created by kemo on 10/01/2017.
