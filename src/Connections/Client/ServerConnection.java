@@ -17,35 +17,39 @@ import java.util.ArrayList;
 public abstract class ServerConnection implements Connection {
     private int port;
     private String serverName;
-    public Socket connectionSocket;
+    private Socket connectionSocket;
+    private ArrayList<Integer> customPorts;
     private ArrayList<ConnectionListener> connectionListeners;
-    public ServerConnection()
+    public ServerConnection(int startPort)
     {
         connectionListeners = new ArrayList<>();
+        customPorts = new ArrayList<>();
+        customPorts.add(startPort);
     }
-    public void connect(String serverName, int startPort) throws ServerNotFound
+    public void connect(String serverName) throws ServerNotFound
     {
         port = -1;
         this.serverName = serverName;
         triggerStartingConnection();
         while(port == -1) {
-            findPort(startPort, startPort + 3);
+            findPort(0);
         }
         startConnection();
     }
+
    public ServerConnection(String serverName, int startPort) throws ServerNotFound {
-       connectionListeners = new ArrayList<>();
-        connect(serverName,startPort);
+        this(startPort);
+        connect(serverName);
     }
-    private void findPort(int sPort, int ePort)
+    private void findPort(int i)
     {
-        if (sPort == ePort) return ;
+        if (i == customPorts.size() - 1) return ;
         try {
             connectionSocket = new Socket();
-            connectionSocket.connect(new InetSocketAddress(serverName,sPort), 1500);
+            connectionSocket.connect(new InetSocketAddress(serverName,customPorts.get(i)), 1500);
             //verify if the socket found is the desired socket
             verifyConnection();
-            port = sPort;
+            port = customPorts.get(i);
             triggerConnectionStarted();
             connectionSocket.setSoTimeout(5000);
         }
@@ -56,10 +60,10 @@ public abstract class ServerConnection implements Connection {
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
             }
-            findPort(sPort + 1, ePort);
+            findPort(i + 1);
         }
         catch (IOException e) {
-            findPort(sPort + 1, ePort);
+            findPort(i + 1);
         }
         catch (Exception e)
         {
@@ -98,5 +102,19 @@ public abstract class ServerConnection implements Connection {
     public void setConnectionListener(ConnectionListener connectionListener)
     {
         connectionListeners.add(connectionListener);
+    }
+
+    public Socket getConnectionSocket() {
+        return connectionSocket;
+    }
+
+    public ArrayList<Integer> getCustomPorts() {
+        return customPorts;
+    }
+    public void setDuePort(int duePort) {
+        if (duePort < 0) throw new NumberFormatException("Invalid negative number duePort = " + duePort);
+        for (int i = customPorts.get(0); i < duePort; i++) {
+            customPorts.add(i);
+        }
     }
 }
