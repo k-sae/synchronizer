@@ -45,7 +45,7 @@ public abstract class ServerConnection implements Connection {
     }
     private void findPort(int i)
     {
-        if (i == customPorts.size() - 1) return ;
+        if (i == customPorts.size()) return ;
         try {
             connectionSocket = new Socket();
             connectionSocket.connect(new InetSocketAddress(serverName,customPorts.get(i)), 1500);
