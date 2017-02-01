@@ -1,6 +1,8 @@
 package Connections;
 
 
+import Connections.Client.TransmissionFailureListener;
+
 import java.io.DataInputStream;
 import java.net.Socket;
 import java.net.SocketException;

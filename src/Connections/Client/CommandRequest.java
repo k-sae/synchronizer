@@ -1,4 +1,6 @@
-package Connections;
+package Connections.Client;
+
+import Connections.Command;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

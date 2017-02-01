@@ -1,4 +1,4 @@
-package Connections;
+package Connections.Client;
 
 import java.net.Socket;
 import java.net.SocketException;

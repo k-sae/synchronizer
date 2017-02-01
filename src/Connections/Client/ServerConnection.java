@@ -1,5 +1,7 @@
-package Connections;
+package Connections.Client;
 
+
+import Connections.Connection;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -12,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by kemo on 28/10/2016.
  */
-public abstract class ServerConnection implements Connection{
+public abstract class ServerConnection implements Connection {
     private int port;
     private String serverName;
     public Socket connectionSocket;
