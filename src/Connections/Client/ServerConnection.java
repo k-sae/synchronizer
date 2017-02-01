@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public abstract class ServerConnection implements Connection {
     private int port;
     private String serverName;
+    private String verification;
     private Socket connectionSocket;
     private ArrayList<Integer> customPorts;
     private ArrayList<ConnectionListener> connectionListeners;
@@ -25,6 +26,7 @@ public abstract class ServerConnection implements Connection {
         connectionListeners = new ArrayList<>();
         customPorts = new ArrayList<>();
         customPorts.add(startPort);
+        verification = VERIFICATION;
     }
     public void connect(String serverName) throws ServerNotFound
     {
@@ -78,9 +80,9 @@ public abstract class ServerConnection implements Connection {
         try {
             connectionSocket.setSoTimeout(200); //set time out for reading input
             DataInputStream dataInputStream = new DataInputStream(connectionSocket.getInputStream());
-            byte[] b = new byte[VERIFICATION.length()];
+            byte[] b = new byte[verification.length()];
             dataInputStream.readFully(b);//reading in bytes format because i cant make sure of the data coming from other sockets
-            if (!(new String(b).equals(VERIFICATION))) throw new IOException("wrong verification code"); //throw exception if code is wrong
+            if (!(new String(b).equals(verification))) throw new IOException("wrong verification code"); //throw exception if code is wrong
         } catch (SocketException e) {
             e.printStackTrace();
         }
@@ -116,5 +118,13 @@ public abstract class ServerConnection implements Connection {
         for (int i = customPorts.get(0); i < duePort; i++) {
             customPorts.add(i);
         }
+    }
+
+    public String getVerification() {
+        return verification;
+    }
+
+    public void setVerification(String verification) {
+        this.verification = verification;
     }
 }
