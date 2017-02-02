@@ -14,19 +14,16 @@ import java.util.ArrayList;
 /**
  * Created by kemo on 28/10/2016.
  */
-public abstract class ServerConnection implements Connection {
-    private int port;
-    private String serverName;
-    private String verification;
-    private Socket connectionSocket;
+public abstract class ServerConnection extends BasicConnection implements Connection {
+
     private ArrayList<Integer> customPorts;
-    private ArrayList<ConnectionListener> connectionListeners;
+
     public ServerConnection(int startPort)
     {
-        connectionListeners = new ArrayList<>();
+        super();
         customPorts = new ArrayList<>();
         customPorts.add(startPort);
-        verification = VERIFICATION;
+
     }
     public void connect(String serverName) throws ServerNotFound
     {
@@ -87,24 +84,7 @@ public abstract class ServerConnection implements Connection {
             e.printStackTrace();
         }
     }
-    private void triggerStartingConnection()
-    {
-        //noinspection ForLoopReplaceableByForEach
-        for (int i = 0; i < connectionListeners.size(); i++) {
-            connectionListeners.get(i).onStart();
-        }
-    }
-    private void triggerConnectionStarted()
-    {
-        //noinspection ForLoopReplaceableByForEach
-        for(int i = 0; i < connectionListeners.size(); i++) {
-            connectionListeners.get(i).onConnectionSuccess();
-        }
-    }
-    public void setConnectionListener(ConnectionListener connectionListener)
-    {
-        connectionListeners.add(connectionListener);
-    }
+
 
     public Socket getConnectionSocket() {
         return connectionSocket;
@@ -120,11 +100,12 @@ public abstract class ServerConnection implements Connection {
         }
     }
 
-    public String getVerification() {
-        return verification;
-    }
-
-    public void setVerification(String verification) {
-        this.verification = verification;
+    public void endConnection()
+    {
+        try {
+            connectionSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
