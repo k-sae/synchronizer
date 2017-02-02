@@ -3,12 +3,10 @@ package Connections.Client;
 
 import Connections.Connection;
 
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
 
 /**
@@ -16,14 +14,10 @@ import java.util.ArrayList;
  */
 public abstract class ServerConnection extends BasicConnection implements Connection {
 
-    private ArrayList<Integer> customPorts;
-
     public ServerConnection(int startPort)
     {
         super();
-        customPorts = new ArrayList<>();
         customPorts.add(startPort);
-
     }
     public void connect(String serverName) throws ServerNotFound
     {
@@ -73,19 +67,6 @@ public abstract class ServerConnection extends BasicConnection implements Connec
             }
         }
     }
-    private void verifyConnection() throws IOException {
-        try {
-            connectionSocket.setSoTimeout(200); //set time out for reading input
-            DataInputStream dataInputStream = new DataInputStream(connectionSocket.getInputStream());
-            byte[] b = new byte[verification.length()];
-            dataInputStream.readFully(b);//reading in bytes format because i cant make sure of the data coming from other sockets
-            if (!(new String(b).equals(verification))) throw new IOException("wrong verification code"); //throw exception if code is wrong
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
-    }
-
-
     public Socket getConnectionSocket() {
         return connectionSocket;
     }

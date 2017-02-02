@@ -1,6 +1,9 @@
 package Connections.Client;
 
+import java.io.DataInputStream;
+import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 
 import static Connections.Connection.VERIFICATION;
@@ -12,11 +15,13 @@ class BasicConnection {
     private ArrayList<ConnectionListener> connectionListeners;
     int port;
     String serverName;
-    String verification;
+    private String verification;
     Socket connectionSocket;
+    protected ArrayList<Integer> customPorts;
     BasicConnection() {
         connectionListeners = new ArrayList<>();
         verification = VERIFICATION;
+        customPorts = new ArrayList<>();
     }
     void triggerStartingConnection()
     {
@@ -42,5 +47,16 @@ class BasicConnection {
 
     public void setVerification(String verification) {
         this.verification = verification;
+    }
+    void verifyConnection() throws IOException {
+        try {
+            connectionSocket.setSoTimeout(200); //set time out for reading input
+            DataInputStream dataInputStream = new DataInputStream(connectionSocket.getInputStream());
+            byte[] b = new byte[verification.length()];
+            dataInputStream.readFully(b);//reading in bytes format because i cant make sure of the data coming from other sockets
+            if (!(new String(b).equals(verification))) throw new IOException("wrong verification code"); //throw exception if code is wrong
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
     }
 }
