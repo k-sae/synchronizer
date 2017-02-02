@@ -2,6 +2,7 @@ package Synchronizer;
 
 import Synchronizer.AppConnections.Server.MainServerConnection;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,7 +19,13 @@ public class Main extends Application {
         MainServerConnection mainServerConnection = new MainServerConnection();
         mainServerConnection.startServer();
     }
-
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        Platform.exit();
+        //this will close all active threads with error code of 0
+        System.exit(0);
+    }
     public static void main(String[] args) {
         launch(args);
     }
