@@ -1,5 +1,6 @@
 package Synchronizer;
 
+import Synchronizer.AppConnections.Server.MainServerConnection;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,6 +15,8 @@ public class Main extends Application {
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
+        MainServerConnection mainServerConnection = new MainServerConnection();
+        mainServerConnection.startServer();
     }
 
     public static void main(String[] args) {
