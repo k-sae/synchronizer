@@ -5,5 +5,6 @@ package Synchronizer.AppConnections;
  */
 public interface ConnectionConstants {
     String VERIFICATION_CODE = "I said don't check!";
+    int INITIAL_PORT = 6040;
     int DUE_PORT = 2;
 }

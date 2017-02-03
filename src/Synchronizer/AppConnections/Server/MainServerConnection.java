@@ -5,6 +5,7 @@ import Connections.Server.ServerInitializer;
 import java.net.Socket;
 
 import static Synchronizer.AppConnections.ConnectionConstants.DUE_PORT;
+import static Synchronizer.AppConnections.ConnectionConstants.INITIAL_PORT;
 import static Synchronizer.AppConnections.ConnectionConstants.VERIFICATION_CODE;
 
 /**
@@ -14,7 +15,7 @@ public class MainServerConnection {
     public void startServer()
     {
         new Thread(() -> {
-            ServerInitializer serverInitializer = new ServerInitializer(6040) {
+            ServerInitializer serverInitializer = new ServerInitializer(INITIAL_PORT) {
                 @Override
                 public void onClientConnection(Socket client) {
                     //start listening for client Requests
