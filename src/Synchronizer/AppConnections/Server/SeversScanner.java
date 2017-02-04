@@ -1,6 +1,7 @@
 package Synchronizer.AppConnections.Server;
 
-import java.io.IOException;
+import Connections.IPAddress;
+
 import java.util.ArrayList;
 
 /**
@@ -9,14 +10,21 @@ import java.util.ArrayList;
 public abstract class SeversScanner {
     private int noOfThreads;
     private int noOfWorkingThreads;
-    private String startingIp;
-    private String endingIp;
-    public SeversScanner(String startingIp) throws IOException {
+    private IPAddress startingIp;
+    private IPAddress endingIp;
+    private ArrayList<ServerMetaData> serversMetaData;
+    public SeversScanner(IPAddress startingIp) {
         noOfThreads = 4;
         noOfWorkingThreads = 0;
         this.startingIp = startingIp;
+        serversMetaData = new ArrayList<>();
+        endingIp = new IPAddress(startingIp.toString());
+        endingIp.getIp()[3] = (short) 254;
     }
-
+    public SeversScanner(String startingIp)
+    {
+        this(new IPAddress(startingIp));
+    }
     public void start()
     {
 
