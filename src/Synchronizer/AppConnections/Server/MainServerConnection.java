@@ -4,9 +4,9 @@ import Connections.Server.ServerInitializer;
 
 import java.net.Socket;
 
-import static Connections.ConnectionConstants.DUE_PORT;
-import static Connections.ConnectionConstants.INITIAL_PORT;
-import static Connections.ConnectionConstants.VERIFICATION_CODE;
+import static Synchronizer.AppConnections.ConnectionConstants.DUE_PORT;
+import static Synchronizer.AppConnections.ConnectionConstants.INITIAL_PORT;
+import static Synchronizer.AppConnections.ConnectionConstants.VERIFICATION_CODE;
 
 /**
  * Created by kemo on 03/02/2017.

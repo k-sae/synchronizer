@@ -1,4 +1,4 @@
-package Connections;
+package Synchronizer.AppConnections;
 
 /**
  * Created by kemo on 03/02/2017.

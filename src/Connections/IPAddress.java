@@ -1,4 +1,4 @@
-package Synchronizer.AppConnections;
+package Connections;
 
 import java.util.Arrays;
 
