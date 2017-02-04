@@ -31,4 +31,9 @@ public class IPAddress {
             ip[i] = Byte.parseByte(ipNos[i]);
         }
     }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(ip);
+    }
 }
