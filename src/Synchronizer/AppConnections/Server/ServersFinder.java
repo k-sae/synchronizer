@@ -1,8 +1,12 @@
 package Synchronizer.AppConnections.Server;
 
+import Connections.Client.ServerFoundListener;
+import Connections.Client.ServerScanner;
 import Connections.IPAddress;
+import Synchronizer.AppConnections.ConnectionConstants;
 
 import java.net.InetAddress;
+import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
@@ -35,8 +39,22 @@ public abstract class ServersFinder {
             new Thread(() -> {
                 short endIp = (short) (portStart + PART_SIZE);
                 if (finalI == noOfThreads - 1) endIp = (short) (endingIp.getIp()[3] + 1);
-                for (int j = portStart; j < endIp; j++) {
+                for (short j = portStart; j < endIp; j++) {
                     //TODO
+                    System.out.print(j + " ");
+                    ServerScanner serverScanner = new ServerScanner(ConnectionConstants.INITIAL_PORT);
+                    serverScanner.setVerification(ConnectionConstants.VERIFICATION_CODE);
+                    serverScanner.setTimeout(100);
+
+                    serverScanner.setServerFoundListener(new ServerFoundListener() {
+                        @Override
+                        public void uponConnection(Socket server) {
+                            System.out.println("serverFound :D");
+                        }
+                    });
+                    IPAddress ipAddress = new IPAddress(startingIp.toString());
+                    ipAddress.getIp()[3] = j;
+                    serverScanner.isAvailable(ipAddress.toString());
                 }
             }).start();
 

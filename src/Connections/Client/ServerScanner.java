@@ -16,7 +16,7 @@ public class ServerScanner extends BasicConnection {
     }
 
     public void isAvailable(String serverName) {
-        for (int i = customPorts.get(0); i < customPorts.size(); i++) {
+        for (int i = 0; i < customPorts.size(); i++) {
 
             try {
                 connectionSocket = new Socket();

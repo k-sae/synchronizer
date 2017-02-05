@@ -69,5 +69,11 @@ class BasicConnection {
     public void setTimeout(int timeout) {
         this.timeout = timeout;
     }
+    public void setDuePort(int duePort) {
+        if (duePort < 0) throw new NumberFormatException("Invalid negative number duePort = " + duePort);
+        for (int i = customPorts.get(0); i < duePort; i++) {
+            customPorts.add(i);
+        }
+    }
 
 }
