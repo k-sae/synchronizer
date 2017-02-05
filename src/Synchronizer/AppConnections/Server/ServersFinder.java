@@ -36,16 +36,16 @@ public abstract class ServersFinder {
         short portStart = startingIp.getIp()[3];
         for (int i = 0; i < noOfThreads; i++) {
             int finalI = i;
+            short finalPortStart = portStart;
             new Thread(() -> {
-                short endIp = (short) (portStart + PART_SIZE);
+                short endIp = (short) (finalPortStart + PART_SIZE);
                 if (finalI == noOfThreads - 1) endIp = (short) (endingIp.getIp()[3] + 1);
-                for (short j = portStart; j < endIp; j++) {
+                for (short j = finalPortStart; j < endIp; j++) {
                     //TODO
                     System.out.print(j + " ");
                     ServerScanner serverScanner = new ServerScanner(ConnectionConstants.INITIAL_PORT);
                     serverScanner.setVerification(ConnectionConstants.VERIFICATION_CODE);
-                    serverScanner.setTimeout(100);
-
+                    serverScanner.setTimeout(20);
                     serverScanner.setServerFoundListener(new ServerFoundListener() {
                         @Override
                         public void uponConnection(Socket server) {
@@ -57,7 +57,7 @@ public abstract class ServersFinder {
                     serverScanner.isAvailable(ipAddress.toString());
                 }
             }).start();
-
+            portStart = (short) (portStart + PART_SIZE);
         }
     }
     public abstract void onFinish(ArrayList<ServerMetaData>  serversMetaData);
