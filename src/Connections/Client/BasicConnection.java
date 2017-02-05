@@ -17,11 +17,13 @@ class BasicConnection {
     String serverName;
     private String verification;
     Socket connectionSocket;
-    protected ArrayList<Integer> customPorts;
+    ArrayList<Integer> customPorts;
+    int timeout;
     BasicConnection() {
         connectionListeners = new ArrayList<>();
         verification = VERIFICATION;
         customPorts = new ArrayList<>();
+        timeout = 1500;
     }
     void triggerStartingConnection()
     {
@@ -59,4 +61,13 @@ class BasicConnection {
             e.printStackTrace();
         }
     }
+
+    public int getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
+    }
+
 }

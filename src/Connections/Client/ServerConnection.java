@@ -7,16 +7,18 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 
 /**
  * Created by kemo on 28/10/2016.
  */
 public abstract class ServerConnection extends BasicConnection implements Connection {
-
+    private int readTimeout;
     public ServerConnection(int startPort)
     {
         super();
+        readTimeout = 5000;
         customPorts.add(startPort);
     }
     public void connect(String serverName) throws ServerNotFound
@@ -39,17 +41,17 @@ public abstract class ServerConnection extends BasicConnection implements Connec
         if (i == customPorts.size()) return ;
         try {
             connectionSocket = new Socket();
-            connectionSocket.connect(new InetSocketAddress(serverName,customPorts.get(i)), 1500);
+            connectionSocket.connect(new InetSocketAddress(serverName,customPorts.get(i)), timeout);
             //verify if the socket found is the desired socket
             verifyConnection();
             port = customPorts.get(i);
             triggerConnectionStarted();
-            connectionSocket.setSoTimeout(5000);
+            connectionSocket.setSoTimeout(readTimeout);
         }
         catch (ConnectException e)
         {
             try {
-                Thread.sleep(1500);
+                Thread.sleep(timeout);
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
             }
@@ -61,7 +63,7 @@ public abstract class ServerConnection extends BasicConnection implements Connec
         catch (Exception e)
         {
             try {
-                Thread.sleep(400);
+                Thread.sleep(timeout);
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
             }
@@ -88,5 +90,18 @@ public abstract class ServerConnection extends BasicConnection implements Connec
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public int getReadTimeout() {
+        return readTimeout;
+    }
+
+    public void setReadTimeout(int readTimeout) {
+        try {
+            connectionSocket.setSoTimeout(readTimeout);
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        this.readTimeout = readTimeout;
     }
 }

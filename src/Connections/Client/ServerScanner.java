@@ -20,7 +20,7 @@ public class ServerScanner extends BasicConnection {
 
             try {
                 connectionSocket = new Socket();
-                connectionSocket.connect(new InetSocketAddress(serverName, customPorts.get(i)), 1500);
+                connectionSocket.connect(new InetSocketAddress(serverName, customPorts.get(i)), timeout);
                 //verify if the socket found is the desired socket
                 verifyConnection();
                 connectionSocket.setSoTimeout(1000);
