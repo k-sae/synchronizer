@@ -33,32 +33,39 @@ public abstract class ServersFinder {
     public void start()
     {
         final short PART_SIZE = (short) ((endingIp.getIp()[3] - startingIp.getIp()[3]) / noOfThreads);
-        short portStart = startingIp.getIp()[3];
+        short startIp = startingIp.getIp()[3];
         for (int i = 0; i < noOfThreads; i++) {
-            int finalI = i;
-            short finalPortStart = portStart;
-            new Thread(() -> {
-                short endIp = (short) (finalPortStart + PART_SIZE);
-                if (finalI == noOfThreads - 1) endIp = (short) (endingIp.getIp()[3] + 1);
-                for (short j = finalPortStart; j < endIp; j++) {
-                    //TODO
-                    System.out.print(j + " ");
-                    ServerScanner serverScanner = new ServerScanner(ConnectionConstants.INITIAL_PORT);
-                    serverScanner.setVerification(ConnectionConstants.VERIFICATION_CODE);
-                    serverScanner.setTimeout(20);
-                    serverScanner.setServerFoundListener(new ServerFoundListener() {
-                        @Override
-                        public void uponConnection(Socket server) {
-                            System.out.println("serverFound :D");
-                        }
-                    });
-                    IPAddress ipAddress = new IPAddress(startingIp.toString());
-                    ipAddress.getIp()[3] = j;
-                    serverScanner.isAvailable(ipAddress.toString());
-                }
-            }).start();
-            portStart = (short) (portStart + PART_SIZE);
+            short endIp = (short) (startIp + PART_SIZE);
+            if (i == noOfThreads - 1) endIp = (short) (endingIp.getIp()[3] + 1);
+            check(startIp, endIp);
+            startIp = (short) (startIp + PART_SIZE);
         }
+    }
+    private void check(short startIp, short endIp )
+    {
+        new Thread(() -> {
+            for (short j = startIp; j < endIp; j++) {
+                ServerScanner serverScanner = new ServerScanner(ConnectionConstants.INITIAL_PORT);
+                serverScanner.setVerification(ConnectionConstants.VERIFICATION_CODE);
+                serverScanner.setTimeout(20);
+                serverScanner.setServerFoundListener(new ServerFoundListener() {
+                    @Override
+                    public void uponConnection(Socket server) {
+                        try {
+                            if (!server.getLocalAddress().toString().contains(InetAddress.getLocalHost().getHostAddress()))
+                           //TODO
+                            ;
+                        } catch (UnknownHostException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                IPAddress ipAddress = new IPAddress(startingIp.toString());
+                ipAddress.getIp()[3] = j;
+                serverScanner.isAvailable(ipAddress.toString());
+            }
+        }).start();
+
     }
     public abstract void onFinish(ArrayList<ServerMetaData>  serversMetaData);
 }
