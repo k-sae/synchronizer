@@ -44,8 +44,6 @@ public abstract class CommandRequest {
           thread.start();
 
         } catch (SocketException e) {
-            //TODO #kareem
-            //notify for user dc
             throw e;
         }catch (SocketTimeoutException e)
         {

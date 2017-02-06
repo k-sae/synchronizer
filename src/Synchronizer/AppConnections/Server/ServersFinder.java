@@ -17,7 +17,7 @@ import java.util.ArrayList;
 //this works on 5 simultaneous threads
 public abstract class ServersFinder {
     private int noOfThreads;
-    private int noOfWorkingThreads;
+    private int noOfWorkingThreads; //idk why volatile ruined every thing btw it seems working without it
     private IPAddress startingIp;
     private IPAddress endingIp;
     private ArrayList<ServerMetaData> serversMetaData;
@@ -33,6 +33,8 @@ public abstract class ServersFinder {
     public void start()
     {
         final short PART_SIZE = (short) ((endingIp.getIp()[3] - startingIp.getIp()[3]) / noOfThreads);
+        noOfWorkingThreads = noOfThreads;
+        startThreadListening();
         short startIp = startingIp.getIp()[3];
         for (int i = 0; i < noOfThreads; i++) {
             short endIp = (short) (startIp + PART_SIZE);
@@ -53,8 +55,9 @@ public abstract class ServersFinder {
                     public void uponConnection(Socket server) {
                         try {
                             if (!server.getLocalAddress().toString().contains(InetAddress.getLocalHost().getHostAddress()))
-                           //TODO
-                            ;
+                            {
+                                //TODO #kareem
+                            }
                         } catch (UnknownHostException e) {
                             e.printStackTrace();
                         }
@@ -64,8 +67,27 @@ public abstract class ServersFinder {
                 ipAddress.getIp()[3] = j;
                 serverScanner.isAvailable(ipAddress.toString());
             }
+            noOfWorkingThreads--;
         }).start();
 
+    }
+    //this function will w8 till all threads finish before trigger onFinish function at last
+    private void startThreadListening()
+    {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (noOfWorkingThreads > 0)
+                {
+                    try {
+                        Thread.sleep(40);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                onFinish(serversMetaData);
+            }
+        }).start();
     }
     public abstract void onFinish(ArrayList<ServerMetaData>  serversMetaData);
 }
