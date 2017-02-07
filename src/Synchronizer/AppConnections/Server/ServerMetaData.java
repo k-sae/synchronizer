@@ -1,9 +1,12 @@
 package Synchronizer.AppConnections.Server;
 
+import Connections.Shareable;
+import com.google.gson.Gson;
+
 /**
  * Created by kemo on 04/02/2017.
  */
-public class ServerMetaData {
+public class ServerMetaData implements Shareable {
     private String ip;
     private int port;
     private String MAC;
@@ -39,5 +42,14 @@ public class ServerMetaData {
 
     public void setName(String name) {
         Name = name;
+    }
+
+    @Override
+    public String convertToString() {
+        return new Gson().toJson(this);
+    }
+    public static ServerMetaData fromString(String jsonStr)
+    {
+        return new Gson().fromJson(jsonStr, ServerMetaData.class);
     }
 }
