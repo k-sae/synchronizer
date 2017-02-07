@@ -8,6 +8,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.Arrays;
+
 public class Main extends Application {
 
     @Override
@@ -18,6 +22,7 @@ public class Main extends Application {
         primaryStage.show();
         MainServerConnection mainServerConnection = new MainServerConnection();
         mainServerConnection.startServer();
+
     }
     @Override
     public void stop() throws Exception {

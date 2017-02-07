@@ -13,6 +13,7 @@ import static Connections.Connection.VERIFICATION;
  */
 public abstract class ServerInitializer {
     private String verification;
+    private ServerSocket serverSocket;
     public ArrayList<Integer> getCustomPorts() {
         return customPorts;
     }
@@ -36,7 +37,7 @@ public abstract class ServerInitializer {
              ) {
             try {
                 //create a server socket where the client will connect on the specified startPort
-                ServerSocket serverSocket = new ServerSocket(port);
+                 serverSocket = new ServerSocket(port);
                 //noinspection InfiniteLoopStatement
                 while (true) { // loop where the server wait for client to start his connection may need to make these process in another thread
                     Socket client = serverSocket.accept();
@@ -66,5 +67,9 @@ public abstract class ServerInitializer {
 
     public void setVerification(String verification) {
         this.verification = verification;
+    }
+
+    public ServerSocket getServerSocket() {
+        return serverSocket;
     }
 }

@@ -2,6 +2,7 @@ package Synchronizer.AppConnections.Server;
 
 import Connections.Server.ServerInitializer;
 
+import java.net.ServerSocket;
 import java.net.Socket;
 
 import static Synchronizer.AppConnections.ConnectionConstants.DUE_PORT;
@@ -12,6 +13,7 @@ import static Synchronizer.AppConnections.ConnectionConstants.VERIFICATION_CODE;
  * Created by kemo on 03/02/2017.
  */
 public class MainServerConnection {
+    private static ServerSocket serverSocket;
     public void startServer()
     {
         new Thread(() -> {
@@ -26,5 +28,9 @@ public class MainServerConnection {
             serverInitializer.setVerification(VERIFICATION_CODE); //don't check the verification code :D
             serverInitializer.startMainConnection();
         }).start();
+    }
+
+    public static ServerSocket getServerSocket() {
+        return serverSocket;
     }
 }
