@@ -23,7 +23,7 @@ public class test {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        while (true){
+
 
         try {
             folder.register(watchService,
@@ -31,13 +31,18 @@ public class test {
                 StandardWatchEventKinds.ENTRY_MODIFY,
                 StandardWatchEventKinds.ENTRY_DELETE);
             WatchKey watchKey;
+
             do {
                 watchKey= watchService.take();
+
+                System.out.println("hhhh");
                 for( WatchEvent <?>event:watchKey.pollEvents()){
+
 
                 WatchEvent.Kind<?> kind= event.kind() ;
                     Path f= (Path) event.context();
                 System.out.println(kind+"  :  "+f);}
+
             }while (watchKey.reset());
         } catch (IOException e) {
             e.printStackTrace();
@@ -54,4 +59,4 @@ public class test {
     }
 
 
-}}
+}

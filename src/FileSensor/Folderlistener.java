@@ -22,7 +22,10 @@ public class Folderlistener implements Runnable {
                 StandardWatchEventKinds.ENTRY_DELETE);
     }
 
-
+    /**
+     * @// TODO 1: 2/7/2017 add log to capture changes
+     * @// TODO 2: 2/7/2017 analyze changes
+     */
     @Override
     public void run() {
 
