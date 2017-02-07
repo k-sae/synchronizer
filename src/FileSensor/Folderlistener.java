@@ -35,11 +35,12 @@ public class Folderlistener implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            for( WatchEvent <?>event:watchKey.pollEvents()){
-
-                WatchEvent.Kind<?> kind= event.kind() ;
-                Path f= (Path) event.context();
-                System.out.println(kind+"  :  "+f);}
+            System.out.println(new Changeanalyzer().analyze(watchKey));
+//            for( WatchEvent <?>event:watchKey.pollEvents()){
+//
+//                WatchEvent.Kind<?> kind= event.kind() ;
+//                Path f= (Path) event.context();
+//                System.out.println(kind+"  :  "+f);}
         }while (watchKey.reset());
 
 
