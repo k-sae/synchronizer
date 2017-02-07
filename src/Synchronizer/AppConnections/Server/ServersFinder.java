@@ -1,9 +1,13 @@
 package Synchronizer.AppConnections.Server;
 
+import Connections.Client.CommandRequest;
+import Connections.Client.CommandsExecutor;
 import Connections.Client.ServerFoundListener;
 import Connections.Client.ServerScanner;
+import Connections.Command;
 import Connections.IPAddress;
 import Synchronizer.AppConnections.ConnectionConstants;
+import Synchronizer.AppConnections.LogicalConstants;
 
 import java.net.InetAddress;
 import java.net.Socket;
@@ -57,6 +61,7 @@ public abstract class ServersFinder {
                             if (!server.getLocalAddress().toString().contains(InetAddress.getLocalHost().getHostAddress()))
                             {
                                 //TODO #kareem
+                                getData(server);
                             }
                         } catch (UnknownHostException e) {
                             e.printStackTrace();
@@ -88,6 +93,18 @@ public abstract class ServersFinder {
                 onFinish(serversMetaData);
             }
         }).start();
+    }
+    private void getData(Socket socket)
+    {
+        Command command = new Command();
+        command.setKeyWord(String.valueOf(LogicalConstants.FETCH_META_DATA));
+        CommandRequest commandRequest = new CommandRequest(socket,command) {
+            @Override
+            public void analyze(Command cmd) {
+
+            }
+        };
+        CommandsExecutor.getInstance().add(commandRequest);
     }
     public abstract void onFinish(ArrayList<ServerMetaData>  serversMetaData);
 }
