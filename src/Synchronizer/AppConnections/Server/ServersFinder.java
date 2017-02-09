@@ -51,6 +51,7 @@ public abstract class ServersFinder {
     {
         new Thread(() -> {
             for (short j = startIp; j < endIp; j++) {
+                System.out.println(j + " ");
                 ServerScanner serverScanner = new ServerScanner(ConnectionConstants.INITIAL_PORT);
                 serverScanner.setVerification(ConnectionConstants.VERIFICATION_CODE);
                 serverScanner.setTimeout(20);
@@ -63,6 +64,7 @@ public abstract class ServersFinder {
                                 //TODO #kareem
                                 getData(server);
                             }
+                            getData(server);
                         } catch (UnknownHostException e) {
                             e.printStackTrace();
                         }
@@ -101,7 +103,7 @@ public abstract class ServersFinder {
         CommandRequest commandRequest = new CommandRequest(socket,command) {
             @Override
             public void analyze(Command cmd) {
-
+                serversMetaData.add(ServerMetaData.fromString(cmd.getObjectStr()));
             }
         };
         CommandsExecutor.getInstance().add(commandRequest);

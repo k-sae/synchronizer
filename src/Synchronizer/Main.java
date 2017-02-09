@@ -1,6 +1,8 @@
 package Synchronizer;
 
 import Synchronizer.AppConnections.Server.MainServerConnection;
+import Synchronizer.AppConnections.Server.ServerMetaData;
+import Synchronizer.AppConnections.Server.ServersFinder;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -8,9 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.util.Arrays;
+import java.util.ArrayList;
 
 public class Main extends Application {
 
@@ -22,7 +22,15 @@ public class Main extends Application {
         primaryStage.show();
         MainServerConnection mainServerConnection = new MainServerConnection();
         mainServerConnection.startServer();
-
+        new ServersFinder() {
+            @Override
+            public void onFinish(ArrayList<ServerMetaData> serversMetaData) {
+                for (ServerMetaData serverMetaData: serversMetaData
+                     ) {
+                    System.out.println(serverMetaData.getMAC());
+                }
+            }
+        }.start();
     }
     @Override
     public void stop() throws Exception {
