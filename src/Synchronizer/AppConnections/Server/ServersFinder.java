@@ -51,7 +51,6 @@ public abstract class ServersFinder {
     {
         new Thread(() -> {
             for (short j = startIp; j < endIp; j++) {
-                System.out.println(j + " ");
                 ServerScanner serverScanner = new ServerScanner(ConnectionConstants.INITIAL_PORT);
                 serverScanner.setVerification(ConnectionConstants.VERIFICATION_CODE);
                 serverScanner.setTimeout(20);

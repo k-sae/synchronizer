@@ -1,5 +1,6 @@
 package Connections.Client;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -24,7 +25,13 @@ public class ServerScanner extends BasicConnection {
                 verifyConnection();
 //                connectionSocket.setSoTimeout(1000);
                 triggerServerFoundListener(connectionSocket);
-                connectionSocket.close();
+                CommandsExecutor.getInstance().add(new ConnectionRunnable() {
+                    @Override
+                    public void run() throws IOException {
+                        connectionSocket.close();
+                    }
+                });
+
             } catch (Exception e) {
                 try {
                     Thread.sleep(timeout);
