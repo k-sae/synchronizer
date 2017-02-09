@@ -12,7 +12,7 @@ import java.net.SocketTimeoutException;
 /**
  * Created by kemo on 08/11/2016.
  */
-public abstract class CommandRequest {
+public abstract class CommandRequest implements ConnectionRunnable {
     private  Socket socket;
     private Command command;
     public CommandRequest(Socket socket, Command   command)
@@ -20,7 +20,7 @@ public abstract class CommandRequest {
        this.socket = socket;
         this.command = command;
     }
-    void run() throws SocketException {
+    public void run() throws SocketException {
         try {
             //send command to server
             DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
