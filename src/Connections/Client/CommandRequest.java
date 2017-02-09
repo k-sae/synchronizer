@@ -30,19 +30,7 @@ public abstract class CommandRequest implements ConnectionRunnable {
             //read string from server
             final String s = dataInputStream.readUTF();
             //start these function in another thread inorder to prevent time consuming
-            Thread thread = new Thread()
-            {
-                @Override
-                public void run() {
-                    super.run();
-                    //put it later
-                    try {
-                        analyze(Command.fromString(s));
-                    }catch (Exception ignored){}
-                }
-            };
-          thread.start();
-
+            analyze(Command.fromString(s));
         } catch (SocketException e) {
             throw e;
         }catch (SocketTimeoutException e)
