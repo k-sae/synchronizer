@@ -21,7 +21,7 @@ public class MainServerConnection {
                 @Override
                 public void onClientConnection(Socket client) {
                     //start listening for client Requests
-                    new CommandsAnalyzer(client);
+                    new CommandsAnalyzer(client).start();
                 }
             };
             serverInitializer.setDuePort(DUE_PORT);

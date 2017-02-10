@@ -23,12 +23,22 @@ public abstract class CommandRequest implements ConnectionRunnable {
     public void run() throws SocketException {
         try {
             //send command to server
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
             dataOutputStream.writeUTF(command.toString());
             //receive server command
             DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
             //read string from server
+            Long time = System.currentTimeMillis();
+            //TODO
+            //figure out why it takes so long time
+            socket.setSoTimeout(5000);
             final String s = dataInputStream.readUTF();
+            System.out.println(System.currentTimeMillis() - time);
             //start these function in another thread inorder to prevent time consuming
             analyze(Command.fromString(s));
         } catch (SocketException e) {

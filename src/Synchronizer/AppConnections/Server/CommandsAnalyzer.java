@@ -27,16 +27,16 @@ public class CommandsAnalyzer extends ReceiveCommand {
             try {
                 serverMetaData.setIp((InetAddress.getLocalHost().getHostAddress()));
                 serverMetaData.setName(MainUser.getMainUser().getName());
-                serverMetaData.setPort(MainServerConnection.getServerSocket().getLocalPort());
+//                serverMetaData.setPort(MainServerConnection.getServerSocket().getLocalPort());
                 InetAddress inetAddress= InetAddress.getLocalHost();
                 NetworkInterface.getByInetAddress(inetAddress);
                 serverMetaData.setMAC((Arrays.toString(NetworkInterface.getNetworkInterfaces().nextElement().getHardwareAddress())));
+                command.setSharableObject(serverMetaData);
 
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            } catch (SocketException e) {
+            } catch (UnknownHostException | SocketException e) {
                 e.printStackTrace();
             }
+            sendCommand(command);
         }
     }
 }

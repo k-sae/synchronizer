@@ -54,6 +54,7 @@ public abstract class ServersFinder {
                 ServerScanner serverScanner = new ServerScanner(ConnectionConstants.INITIAL_PORT);
                 serverScanner.setVerification(ConnectionConstants.VERIFICATION_CODE);
                 serverScanner.setTimeout(20);
+                System.out.print(j + " ");
                 serverScanner.setServerFoundListener(new ServerFoundListener() {
                     @Override
                     public void uponConnection(Socket server) {
@@ -90,6 +91,7 @@ public abstract class ServersFinder {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    System.out.println("retrying "+ noOfWorkingThreads);
                 }
                 onFinish(serversMetaData);
             }
@@ -99,10 +101,12 @@ public abstract class ServersFinder {
     {
         Command command = new Command();
         command.setKeyWord(String.valueOf(LogicalConstants.FETCH_META_DATA));
+        noOfWorkingThreads++;
         CommandRequest commandRequest = new CommandRequest(socket,command) {
             @Override
             public void analyze(Command cmd) {
                 serversMetaData.add(ServerMetaData.fromString(cmd.getObjectStr()));
+                noOfWorkingThreads--;
             }
         };
         CommandsExecutor.getInstance().add(commandRequest);

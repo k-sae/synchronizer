@@ -25,9 +25,10 @@ public class Main extends Application {
         new ServersFinder() {
             @Override
             public void onFinish(ArrayList<ServerMetaData> serversMetaData) {
+                System.out.println("size "+ serversMetaData.size());
                 for (ServerMetaData serverMetaData: serversMetaData
                      ) {
-                    System.out.println(serverMetaData.getMAC());
+                    System.out.println("ip: " +serverMetaData.getIp());
                 }
             }
         }.start();

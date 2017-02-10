@@ -3,6 +3,7 @@ package Connections;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
@@ -33,7 +34,11 @@ public abstract class ReceiveCommand extends Thread {
                 DataInputStream objectInputStream = new DataInputStream(remote.getInputStream()); //open remote stream
                 Command command = Command.fromString(objectInputStream.readUTF()); //generate command from string
                 Analyze(command); //send it to the abstract function Analyze so other team members do there work
-            } catch (SocketException e) {
+            }catch (EOFException e)
+            {
+                break;
+            }
+            catch (SocketException e) {
                 triggerListeners();
             } catch (Exception e) {
                 //Export to log
