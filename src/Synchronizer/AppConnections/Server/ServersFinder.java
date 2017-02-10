@@ -11,6 +11,7 @@ import Synchronizer.AppConnections.LogicalConstants;
 
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
@@ -54,7 +55,6 @@ public abstract class ServersFinder {
                 ServerScanner serverScanner = new ServerScanner(ConnectionConstants.INITIAL_PORT);
                 serverScanner.setVerification(ConnectionConstants.VERIFICATION_CODE);
                 serverScanner.setTimeout(20);
-                System.out.print(j + " ");
                 serverScanner.setServerFoundListener(new ServerFoundListener() {
                     @Override
                     public void uponConnection(Socket server) {
@@ -74,9 +74,13 @@ public abstract class ServersFinder {
                 ipAddress.getIp()[3] = j;
                 serverScanner.isAvailable(ipAddress.toString());
             }
-            noOfWorkingThreads--;
+            changeValueOfWorkingThreadBy(-1);
         }).start();
 
+    }
+    private synchronized void changeValueOfWorkingThreadBy(int value)
+    {
+        noOfWorkingThreads += value;
     }
     //this function will w8 till all threads finish before trigger onFinish function at last
     private void startThreadListening()
@@ -91,7 +95,6 @@ public abstract class ServersFinder {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    System.out.println("retrying "+ noOfWorkingThreads);
                 }
                 onFinish(serversMetaData);
             }
@@ -101,12 +104,17 @@ public abstract class ServersFinder {
     {
         Command command = new Command();
         command.setKeyWord(String.valueOf(LogicalConstants.FETCH_META_DATA));
-        noOfWorkingThreads++;
+        changeValueOfWorkingThreadBy(1);
+        try {
+            socket.setSoTimeout(5000);
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
         CommandRequest commandRequest = new CommandRequest(socket,command) {
             @Override
             public void analyze(Command cmd) {
                 serversMetaData.add(ServerMetaData.fromString(cmd.getObjectStr()));
-                noOfWorkingThreads--;
+                changeValueOfWorkingThreadBy(-1);
             }
         };
         CommandsExecutor.getInstance().add(commandRequest);
