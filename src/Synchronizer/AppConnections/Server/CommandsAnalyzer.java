@@ -7,6 +7,7 @@ import Synchronizer.Control.MainUser;
 
 import java.net.*;
 import java.util.Arrays;
+import java.util.Enumeration;
 
 /**
  * Created by kemo on 03/02/2017.
@@ -27,10 +28,24 @@ public class CommandsAnalyzer extends ReceiveCommand {
             try {
                 serverMetaData.setIp((InetAddress.getLocalHost().getHostAddress()));
                 serverMetaData.setName(MainUser.getMainUser().getName());
-//                serverMetaData.setPort(MainServerConnection.getServerSocket().getLocalPort());
-                InetAddress inetAddress= InetAddress.getLocalHost();
-                NetworkInterface.getByInetAddress(inetAddress);
-                serverMetaData.setMAC((Arrays.toString(NetworkInterface.getNetworkInterfaces().nextElement().getHardwareAddress())));
+                Enumeration<NetworkInterface> enumeration = NetworkInterface.getNetworkInterfaces();
+                byte[] macAddress = new byte[6];
+                while (enumeration.hasMoreElements())
+                {
+                    byte[] mac = enumeration.nextElement().getHardwareAddress();
+                    if (mac != null) {
+                        //use this to format mac
+                        //i don't understand it so i left it :D
+//                        for (int k = 0; k < mac.length; k++) {
+//                            System.out.format("%02X%s", mac[k], (k < mac.length - 1) ? "-" : "");
+//                        }
+//                        System.out.println();
+                        macAddress = mac;
+                        break;
+                    }
+
+                }
+                serverMetaData.setMAC((Arrays.toString(macAddress)));
                 command.setSharableObject(serverMetaData);
 
             } catch (UnknownHostException | SocketException e) {

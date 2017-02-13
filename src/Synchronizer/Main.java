@@ -27,7 +27,7 @@ public class Main extends Application {
             public void onFinish(ArrayList<ServerMetaData> serversMetaData) {
                 for (ServerMetaData serverMetaData: serversMetaData
                      ) {
-                    System.out.println("ip: " +serverMetaData.getIp());
+                    System.out.println("MAC: " +serverMetaData.getMAC());
                 }
             }
         }.start();
